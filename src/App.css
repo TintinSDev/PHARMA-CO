@@ -21,13 +21,13 @@ ul {
   padding: 0;
 }
 
-li {
+/* li {
   background-color: #fff;
   margin: 10px 0;
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
+} */
 
 a {
   text-decoration: none;
@@ -97,22 +97,24 @@ form button:hover {
 }
 
 /* Patient and Collection Lists */
-.patient-list, .overdue-list {
+.patient-list, .collection-list {
   padding: 20px;
   background-color: #faf4f4;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin: 20px 0;
 }
-.patient-list li {
-  background-color: #666666;
-  color: rgb(255, 255, 255);
+/* .patient-list li {
+  background-color: #ffffff; 
   margin: 10px 0;
   padding: 10px;
+  width: 100%;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-.patient-list h2, .overdue-list h2 {
+} */
+
+
+.patient-list h2, .collection-list h2 {
   font-size: 24px;
   color: #2980b9;
 }

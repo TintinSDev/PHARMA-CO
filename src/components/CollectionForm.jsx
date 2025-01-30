@@ -3,10 +3,11 @@ import axios from "axios";
 
 function CollectionForm() {
   const [patientId, setPatientId] = useState("");
-  const [regimen, setRegimen] = useState(""); // Changed regimenId to regimen (string)
+  const [regimen, setRegimen] = useState(""); // Regimen as string
   const [quantity, setQuantity] = useState("");
   const [collectionDate, setCollectionDate] = useState("");
   const [nextCollectionDate, setNextCollectionDate] = useState("");
+  const [submittedCollection, setSubmittedCollection] = useState(null); // To store submitted collection data
 
   // Function to calculate the next collection date
   const handleCollectionDateChange = (e) => {
@@ -24,55 +25,85 @@ function CollectionForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post("http://localhost:5174/collections", {
-      patient_id: patientId,
-      regimen: regimen, // Send regimen string
-      quantity: parseInt(quantity),
-      collection_date: collectionDate,
-      next_collection_date: nextCollectionDate,
-    });
+    try {
+      const response = await axios.post("http://localhost:5174/collections", {
+        patient_id: patientId,
+        regimen: regimen,
+        quantity: parseInt(quantity),
+        collection_date: collectionDate,
+        next_collection_date: nextCollectionDate,
+      });
+
+      // Set the returned data to display on successful submission
+      setSubmittedCollection({
+        patientName: response.data.patient_name,
+        regimen: response.data.regimen,
+        nextCollectionDate: response.data.next_collection_date,
+      });
+      
+      // Clear the form
+      setPatientId("");
+      setRegimen("");
+      setQuantity("");
+      setCollectionDate("");
+      setNextCollectionDate("");
+    } catch (err) {
+      console.error("Error adding collection:", err);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>Enter Patient ID (Unique Identifier):</label>
-      <input
-        type="text"
-        value={patientId}
-        onChange={(e) => setPatientId(e.target.value)}
-        required
-      />
+    <div>
+      <h2>Collection Form</h2>
+      <form onSubmit={handleSubmit}>
+        <label>Enter Patient ID (Unique Identifier):</label>
+        <input
+          type="text"
+          value={patientId}
+          onChange={(e) => setPatientId(e.target.value)}
+          required
+        />
 
-      <label>Enter Regimen (Treatment Plan):</label>
-      <input
-        type="text"
-        value={regimen}
-        onChange={(e) => setRegimen(e.target.value)} // Handle regimen input as a string
-        required
-      />
+        <label>Enter Regimen (Treatment Plan):</label>
+        <input
+          type="text"
+          value={regimen}
+          onChange={(e) => setRegimen(e.target.value)}
+          required
+        />
 
-      <label>Enter Quantity (Number of Doses):</label>
-      <input
-        type="number"
-        max="180"
-        value={quantity}
-        onChange={(e) => setQuantity(e.target.value)}
-        required
-      />
+        <label>Enter Quantity (Number of Doses):</label>
+        <input
+          type="number"
+          max="180"
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
+          required
+        />
 
-      <label>Select Collection Date:</label>
-      <input
-        type="date"
-        value={collectionDate}
-        onChange={handleCollectionDateChange}
-        required
-      />
+        <label>Select Collection Date:</label>
+        <input
+          type="date"
+          value={collectionDate}
+          onChange={handleCollectionDateChange}
+          required
+        />
 
-      <label>Next Collection Date (Auto-Generated):</label>
-      <input type="date" value={nextCollectionDate} readOnly />
+        <label>Next Collection Date (Auto-Generated):</label>
+        <input type="date" value={nextCollectionDate} readOnly />
 
-      <button type="submit">Submit</button>
-    </form>
+        <button type="submit">Submit</button>
+      </form>
+
+      {submittedCollection && (
+        <div>
+          <h3>Collection Added Successfully!</h3>
+          <p>Patient Name: {submittedCollection.patientName}</p>
+          <p>Regimen: {submittedCollection.regimen}</p>
+          <p>Next Collection Date: {submittedCollection.nextCollectionDate}</p>
+        </div>
+      )}
+    </div>
   );
 }
 

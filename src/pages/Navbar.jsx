@@ -14,7 +14,7 @@ const Navbar = () => {
           <Link to="/collection-form">Collection Form</Link>
         </li>
         <li>
-          <Link to="/overdue-list">Overdue List</Link>
+          <Link to="/collection-list">Collection List</Link>
         </li>
         <li>
           <Link to="/patient-form">Patient Form</Link>

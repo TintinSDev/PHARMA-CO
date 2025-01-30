@@ -10,7 +10,7 @@ class Patient(Base):
     middle_name = Column(String, index=True, unique=True )
     last_name = Column(String, index=True, unique=True )
 
-class Regimen(Base):
+class CollectionList(Base):
     __tablename__ = "regimens"
 
     id = Column(Integer, primary_key=True, index=True)
