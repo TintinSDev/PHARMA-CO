@@ -1,0 +1,114 @@
+from fastapi import FastAPI, HTTPException, Depends
+from pydantic import BaseModel
+from datetime import date, timedelta
+from sqlalchemy import Column, Integer, String, Date, ForeignKey, create_engine, CheckConstraint
+from sqlalchemy.orm import declarative_base, sessionmaker, relationship, Session
+from fastapi.middleware.cors import CORSMiddleware
+
+# Database Configuration
+DATABASE_URL = "sqlite:///./database.db"
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+Base = declarative_base()
+
+# FastAPI App
+app = FastAPI()
+
+# CORS Middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],  
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# SQLAlchemy Models
+class Patient(Base):
+    __tablename__ = "patients"
+
+    id = Column(Integer, primary_key=True, index=True)
+    first_name = Column(String, index=True)
+    middle_name = Column(String, index=True)
+    last_name = Column(String, index=True)
+
+class Regimen(Base):
+    __tablename__ = "regimens"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+
+class Collection(Base):
+    __tablename__ = "collections"
+
+    id = Column(Integer, primary_key=True, index=True)
+    patient_id = Column(Integer, ForeignKey("patients.id"))
+    regimen_id = Column(Integer, ForeignKey("regimens.id"))
+    quantity = Column(Integer, CheckConstraint("quantity <= 180"))
+    collection_date = Column(Date)
+    next_collection_date = Column(Date)
+    overdue_date = Column(Date)
+
+    patient = relationship("Patient")
+    regimen = relationship("Regimen")
+
+# Create Database Tables
+Base.metadata.create_all(bind=engine)
+
+# Dependency to get database session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# Pydantic Models
+class PatientCreate(BaseModel):
+    first_name: str
+    middle_name: str
+    last_name: str
+
+class CollectionCreate(BaseModel):
+    patient_id: int
+    regimen_id: int
+    quantity: int
+    collection_date: date
+
+# API Endpoints
+@app.post("/patients/")
+def add_patient(patient: PatientCreate, db: Session = Depends(get_db)):
+    new_patient = Patient(**patient.dict())
+    db.add(new_patient)
+    db.commit()
+    db.refresh(new_patient)
+    return new_patient
+
+@app.get("/patients/")
+def get_patients(db: Session = Depends(get_db)):
+    return db.query(Patient).all()
+
+@app.post("/collections/")
+def add_collection(collection: CollectionCreate, db: Session = Depends(get_db)):
+    next_collection_date = collection.collection_date + timedelta(days=90)
+    overdue_date = next_collection_date + timedelta(days=7)
+
+    new_collection = Collection(
+        patient_id=collection.patient_id,
+        regimen_id=collection.regimen_id,
+        quantity=collection.quantity,
+        collection_date=collection.collection_date,
+        next_collection_date=next_collection_date,
+        overdue_date=overdue_date
+    )
+
+    db.add(new_collection)
+    db.commit()
+    db.refresh(new_collection)
+    return new_collection
+
+@app.get("/overdue/")
+def get_overdue(db: Session = Depends(get_db)):
+    return db.query(Collection).filter(Collection.overdue_date < date.today()).all()
+
+# Run the app using: uvicorn main:app --reload --host 0.0.0.0 --port 5173

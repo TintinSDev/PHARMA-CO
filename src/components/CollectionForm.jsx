@@ -3,7 +3,7 @@ import axios from "axios";
 
 function CollectionForm() {
   const [patientId, setPatientId] = useState("");
-  const [regimenId, setRegimenId] = useState("");
+  const [regimen, setRegimen] = useState(""); // Changed regimenId to regimen (string)
   const [quantity, setQuantity] = useState("");
   const [collectionDate, setCollectionDate] = useState("");
   const [nextCollectionDate, setNextCollectionDate] = useState("");
@@ -26,7 +26,7 @@ function CollectionForm() {
     e.preventDefault();
     await axios.post("http://localhost:5173/collections", {
       patient_id: patientId,
-      regimen_id: regimenId,
+      regimen: regimen, // Send regimen string
       quantity: parseInt(quantity),
       collection_date: collectionDate,
       next_collection_date: nextCollectionDate,
@@ -36,16 +36,37 @@ function CollectionForm() {
   return (
     <form onSubmit={handleSubmit}>
       <label>Enter Patient ID (Unique Identifier):</label>
-      <input type="text" value={patientId} onChange={(e) => setPatientId(e.target.value)} required />
+      <input
+        type="text"
+        value={patientId}
+        onChange={(e) => setPatientId(e.target.value)}
+        required
+      />
 
-      <label>Enter Regimen ID (Treatment Plan):</label>
-      <input type="text" value={regimenId} onChange={(e) => setRegimenId(e.target.value)} required />
+      <label>Enter Regimen (Treatment Plan):</label>
+      <input
+        type="text"
+        value={regimen}
+        onChange={(e) => setRegimen(e.target.value)} // Handle regimen input as a string
+        required
+      />
 
       <label>Enter Quantity (Number of Doses):</label>
-      <input type="number" max="180" value={quantity} onChange={(e) => setQuantity(e.target.value)} required />
+      <input
+        type="number"
+        max="180"
+        value={quantity}
+        onChange={(e) => setQuantity(e.target.value)}
+        required
+      />
 
       <label>Select Collection Date:</label>
-      <input type="date" value={collectionDate} onChange={handleCollectionDateChange} required />
+      <input
+        type="date"
+        value={collectionDate}
+        onChange={handleCollectionDateChange}
+        required
+      />
 
       <label>Next Collection Date (Auto-Generated):</label>
       <input type="date" value={nextCollectionDate} readOnly />
