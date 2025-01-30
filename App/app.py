@@ -3,7 +3,30 @@ from pydantic import BaseModel
 from datetime import date, timedelta
 import sqlite3
 from models import Patient, Collection
+from flask import Flask, send_from_directory, send_file, request, jsonify, Blueprint,session, redirect, url_for
+import json, requests
+from flask_restful import Api, Resource
+from flask_migrate import Migrate
+from flask_cors import CORS, cross_origin
+from mpesa_payment import MpesaPayment
+from werkzeug.security import generate_password_hash
+import os
+from os import environ
 
+
+app = Flask(__name__)
+api = Api(app)
+# Init db
+
+BASEDIR = os.path.join(os.path.dirname(__file__))
+
+# Database connection
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASEDIR, 'app.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+CORS(app, origins="http://127.0.0.1:5173")
 app = FastAPI()
 
 

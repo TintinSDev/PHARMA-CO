@@ -9,7 +9,7 @@ function OverdueList() {
   }, []);
 
   const fetchCollections = async () => {
-    const response = await axios.get("http://localhost:8000/overdue");
+    const response = await axios.get("http://localhost:5173/overdue");
     setCollections(response.data);
   };
 
