@@ -12,6 +12,16 @@ from mpesa_payment import MpesaPayment
 from werkzeug.security import generate_password_hash
 import os
 from os import environ
+from fastapi.middleware.cors import CORSMiddleware
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Change this to your frontend's URL for better security
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 app = Flask(__name__)
@@ -69,3 +79,5 @@ def get_overdue():
     overdue_collections = cursor.fetchall()
     conn.close()
     return overdue_collections
+
+uvicorn main:app --reload --host 0.0.0.0 --port 8000

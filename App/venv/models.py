@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from datetime import date, timedelta
 import sqlite3
 
-app = FastAPI()
+
 
 # Database Connection
 
