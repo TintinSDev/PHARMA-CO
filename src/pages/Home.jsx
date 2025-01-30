@@ -1,15 +1,12 @@
-import PatientForm from "./components/PatientForm";
-import CollectionForm from "./components/CollectionForm";
-import OverdueList from "./components/OverdueList";
-import PatientList from "./components/PatientList";
+
 function Home() {
     return (
       <div>
         <h1>ARV Collection Tracking</h1>
-        <PatientForm />
-        <PatientList />
-        <CollectionForm />
-        <OverdueList />
+        <p>
+          Welcome to the ARV Collection Tracking System. Please select an option
+          from the navigation bar.
+        </p>
       </div>
     );
   }

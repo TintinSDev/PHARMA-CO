@@ -14,7 +14,7 @@ function PatientList() {
   };
 
   return (
-    <div>
+    <div className="patient-list">
       <h2>Patient List</h2>
       <ul>
         {patients.map((p) => (

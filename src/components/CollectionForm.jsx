@@ -19,14 +19,18 @@ function CollectionForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>Patient ID:</label>
+      <label>Enter Patient ID (Unique Identifier):</label>
       <input type="text" value={patientId} onChange={(e) => setPatientId(e.target.value)} />
-      <label>Regimen:</label>
+
+      <label>Enter Regimen ID (Treatment Plan):</label>
       <input type="text" value={regimenId} onChange={(e) => setRegimenId(e.target.value)} />
-      <label>Quantity:</label>
+
+      <label>Enter Quantity (Number of Doses):</label>
       <input type="number" max="180" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-      <label>Collection Date:</label>
+
+      <label>Select Collection Date:</label>
       <input type="date" value={collectionDate} onChange={(e) => setCollectionDate(e.target.value)} />
+
       <button type="submit">Submit</button>
     </form>
   );

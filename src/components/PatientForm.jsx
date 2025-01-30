@@ -9,7 +9,7 @@ function PatientForm() {
   }, []);
 
   const fetchPatients = async () => {
-    const response = await axios.get("http://localhost:5173patients");
+    const response = await axios.get("http://localhost:5173/patients");
     setPatients(response.data);
   };
 

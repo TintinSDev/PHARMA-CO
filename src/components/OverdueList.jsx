@@ -14,7 +14,7 @@ function OverdueList() {
   };
 
   return (
-    <div>
+    <div className="overdue-list">
       <h2>Overdue Collections</h2>
       <ul>
         {collections.map((c) => (
