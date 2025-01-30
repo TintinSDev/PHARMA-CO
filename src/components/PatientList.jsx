@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-function PatientForm() {
+function PatientList() {
   const [patients, setPatients] = useState([]);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ function PatientForm() {
 
   return (
     <div>
-      <h2>Patients</h2>
+      <h2>Patient List</h2>
       <ul>
         {patients.map((p) => (
           <li key={p[0]}>{p[1]} {p[2]} {p[3]}</li>
@@ -25,4 +25,4 @@ function PatientForm() {
   );
 }
 
-export default PatientForm;
+export default PatientList;

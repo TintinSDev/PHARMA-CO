@@ -1,17 +1,17 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import PatientForm from "./components/PatientForm";
-import CollectionForm from "./components/CollectionForm";
-import OverdueList from "./components/OverdueList";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Patients from "./pages/Patients";
+import Collections from "./pages/Collections";
 
 function App() {
   return (
-    <div>
-      <h1>ARV Collection Tracking</h1>
-      <PatientForm />
-      <CollectionForm />
-      <OverdueList />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/patients" element={<Patients />} />
+        <Route path="/collections" element={<Collections />} />
+      </Routes>
+    </Router>
   );
 }
 

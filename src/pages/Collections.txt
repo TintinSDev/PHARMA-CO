@@ -1,0 +1,13 @@
+
+
+function Collections() {
+    return (
+      <div>
+        <h1>Collections</h1>
+        <CollectionForm />
+        <OverdueList />
+      </div>
+    );
+  }
+  
+  export default Collections;
