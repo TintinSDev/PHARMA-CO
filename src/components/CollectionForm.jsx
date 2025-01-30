@@ -47,8 +47,15 @@ function CollectionForm() {
       setQuantity("");
       setCollectionDate("");
       setNextCollectionDate("");
+
+      // Show success alert
+      alert("Collection added successfully!");
+
     } catch (err) {
       console.error("Error adding collection:", err);
+
+      // Show error alert
+      alert("Failed to add collection. Please try again.");
     }
   };
 
@@ -96,7 +103,7 @@ function CollectionForm() {
       </form>
 
       {submittedCollection && (
-        <div>
+        <div style={{ color: "green", marginTop: "1rem", bold: true }}>
           <h3>Collection Added Successfully!</h3>
           <p>Patient Name: {submittedCollection.patientName}</p>
           <p>Regimen: {submittedCollection.regimen}</p>

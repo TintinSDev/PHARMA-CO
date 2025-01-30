@@ -20,8 +20,13 @@ function PatientForm() {
       setFirstName("");
       setMiddleName("");
       setLastName("");
+
+       // Show success alert
+    alert("Patient added successfully!");
     } catch (err) {
       console.error("Error adding patient:", err);
+       // Show error alert
+    alert("Failed to add patient. Please try again.");
     }
   };
 
@@ -56,7 +61,7 @@ function PatientForm() {
       </form>
 
       {patientId && (
-        <div>
+        <div style={{ color: "green", marginTop: "1rem", bold: true}}>
           <h3>Patient added successfully!</h3>
           <p>Patient ID: {patientId}</p>
         </div>

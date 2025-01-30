@@ -147,3 +147,35 @@ nav ul {
 nav li {
   display: inline;
 }
+.grid-container {
+
+  /* grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); */
+  gap: 10px;
+  list-style-type: none;
+}
+
+.grid-container li {
+  background-color: #0c0b0b;
+}
+
+/* .pagination {
+ 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+
+.pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  background-color: #415468;
+  color: white;
+  border-radius: 5px;
+}
+
+.pagination button:hover {
+  background-color: #1a1d20;
+  transition: 0.3s ease;
+}
