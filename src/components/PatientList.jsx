@@ -14,28 +14,23 @@ function PatientList() {
     try {
       const response = await axios.get("http://localhost:5174/patients");
       setPatients(response.data);
-      setLoading(false); // Stop loading once data is fetched
-    } catch  {
+    } catch (error) {
       setError("Failed to fetch patients. Please try again later.");
-      setLoading(false); // Stop loading on error
+    } finally {
+      setLoading(false); // Ensure loading stops regardless of success or error
     }
   };
 
-  if (loading) {
-    return <p>Loading patients...</p>; // Show loading text while fetching data
-  }
-
-  if (error) {
-    return <p>{error}</p>; // Show error message if fetch fails
-  }
+  if (loading) return <p>Loading patients...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="patient-list">
       <h2>Patients</h2>
-      <ul className="patient-list-ul">
-        {patients.map((p) => (
-          <li key={p[0]}>
-            {p[1]} {p[2]} {p[3]}
+      <ul>
+        {patients.map((patient) => (
+          <li key={patient.id}>
+            {patient.first_name} {patient.middle_name} {patient.last_name}
           </li>
         ))}
       </ul>
@@ -44,4 +39,3 @@ function PatientList() {
 }
 
 export default PatientList;
-

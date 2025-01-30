@@ -21,14 +21,7 @@ ul {
   padding: 0;
 }
 
-/* li {
-  background-color: #fff;
-  margin: 10px 0;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-} */
-
+/* Link Styles */
 a {
   text-decoration: none;
   color: #2980b9;
@@ -104,14 +97,17 @@ form button:hover {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin: 20px 0;
 }
-/* .patient-list li {
-  background-color: #ffffff; 
-  margin: 10px 0;
-  padding: 10px;
-  width: 100%;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-} */
+
+
+.patient-list,.collection-list {
+  background-color: #2e2c2c;
+}
+
+.patient-list ul, .collection-list ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  
+}
 
 
 .patient-list h2, .collection-list h2 {
