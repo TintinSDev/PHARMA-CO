@@ -99,12 +99,19 @@ form button:hover {
 /* Patient and Collection Lists */
 .patient-list, .overdue-list {
   padding: 20px;
-  background-color: #fff;
+  background-color: #faf4f4;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin: 20px 0;
 }
-
+.patient-list li {
+  background-color: #666666;
+  color: rgb(255, 255, 255);
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 .patient-list h2, .overdue-list h2 {
   font-size: 24px;
   color: #2980b9;

@@ -12,7 +12,7 @@ function PatientList() {
 
   const fetchPatients = async () => {
     try {
-      const response = await axios.get("http://localhost:5173/patients");
+      const response = await axios.get("http://localhost:5174/patients");
       setPatients(response.data);
       setLoading(false); // Stop loading once data is fetched
     } catch  {
@@ -32,7 +32,7 @@ function PatientList() {
   return (
     <div className="patient-list">
       <h2>Patients</h2>
-      <ul>
+      <ul className="patient-list-ul">
         {patients.map((p) => (
           <li key={p[0]}>
             {p[1]} {p[2]} {p[3]}

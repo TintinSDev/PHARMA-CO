@@ -111,4 +111,4 @@ def add_collection(collection: CollectionCreate, db: Session = Depends(get_db)):
 def get_overdue(db: Session = Depends(get_db)):
     return db.query(Collection).filter(Collection.overdue_date < date.today()).all()
 
-# Run the app using: uvicorn main:app --reload --host 0.0.0.0 --port 5173
+# Run the app using: uvicorn backend.main:app --reload --host 0.0.0.0 --port 5174

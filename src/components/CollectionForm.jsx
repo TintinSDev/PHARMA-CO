@@ -24,7 +24,7 @@ function CollectionForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post("http://localhost:5173/collections", {
+    await axios.post("http://localhost:5174/collections", {
       patient_id: patientId,
       regimen: regimen, // Send regimen string
       quantity: parseInt(quantity),
