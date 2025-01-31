@@ -54,7 +54,7 @@ function PatientList() {
 
   const fetchPatients = async () => {
     try {
-      const response = await axios.get(`http://localhost:5174/patients?page=${currentPage}&limit=${limit}`);
+      const response = await axios.get(`https://pharmartcoh.onrender.com/patients?page=${currentPage}&limit=${limit}`);
       setPatients(response.data.patients);
       setTotalPatients(response.data.total);
     } catch (error) {
