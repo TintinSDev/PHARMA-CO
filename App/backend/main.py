@@ -12,7 +12,7 @@ app = FastAPI()
 # CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://pharma-co.onrender.com"],  # Change this to your frontend URL
+    allow_origins=[""],  # Change this to your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -26,3 +26,5 @@ app.include_router(collectionlist.router)
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the FastAPI App!"}
+
+# https://pharma-co.onrender.com
