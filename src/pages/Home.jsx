@@ -1,4 +1,4 @@
-import pharma from '/public/pharma.jpg';
+import pharma from '/pharma.jpg';
 function Home() {
     return (
       <div>
