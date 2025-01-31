@@ -12,7 +12,7 @@ app = FastAPI()
 # CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change this to your frontend URL
+    allow_origins=["https://pharma-co.onrender.com"],  # Change this to your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

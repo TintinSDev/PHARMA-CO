@@ -1,7 +1,8 @@
-
+import pharma from '/public/pharma.jpg';
 function Home() {
     return (
       <div>
+        <img src={pharma} alt="Pharma" className='pharma'/>
         <h1>ARV Collection Tracking</h1>
         <p>
           Welcome to the ARV Collection Tracking System. Please select an option
@@ -12,4 +13,3 @@ function Home() {
   }
   
   export default Home;
-  

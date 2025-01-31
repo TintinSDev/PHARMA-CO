@@ -1,12 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
+import Confetti from "react-confetti";
 
 function PatientForm() {
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
   const [patientId, setPatientId] = useState(null);  // To store the patient ID after submission
-
+  const [showConfetti, setShowConfetti] = useState(false)
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -15,11 +16,16 @@ function PatientForm() {
         middle_name: middleName,
         last_name: lastName,
       });
+
       setPatientId(response.data.id); // Assuming the backend returns the patient ID
       // Clear the form fields after submission
       setFirstName("");
       setMiddleName("");
       setLastName("");
+       // Show confetti after successful submission
+       setShowConfetti(true);
+       setTimeout(() => setShowConfetti(false), 9000); // Hide confetti after 5 seconds
+ 
 
        // Show success alert
     alert("Patient added successfully!");
@@ -66,6 +72,7 @@ function PatientForm() {
           <p>Patient ID: {patientId}</p>
         </div>
       )}
+      {showConfetti && <Confetti />}
     </div>
   );
 }

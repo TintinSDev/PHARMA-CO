@@ -164,7 +164,7 @@ function CollectionList() {
   const [search, setSearch] = useState(""); // Search query state
   const [currentPage, setCurrentPage] = useState(0);
   const [totalCollections, setTotalCollections] = useState(0);
-  const limit = 2; // Number of collections per page
+  const limit = 5; // Number of collections per page
 
   useEffect(() => {
     fetchCollections();

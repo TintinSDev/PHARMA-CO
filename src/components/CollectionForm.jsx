@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import Confetti from "react-confetti";
 
 function CollectionForm() {
   const [patientId, setPatientId] = useState("");
@@ -8,6 +9,7 @@ function CollectionForm() {
   const [collectionDate, setCollectionDate] = useState("");
   const [nextCollectionDate, setNextCollectionDate] = useState("");
   const [submittedCollection, setSubmittedCollection] = useState(null); // To store submitted collection data
+  const [showConfetti, setShowConfetti] = useState(false)
 
   // Function to calculate the next collection date
   const handleCollectionDateChange = (e) => {
@@ -47,6 +49,10 @@ function CollectionForm() {
       setQuantity("");
       setCollectionDate("");
       setNextCollectionDate("");
+
+      // Show confetti after successful submission
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 9000); // Hide confetti after 5 seconds
 
       // Show success alert
       alert("Collection added successfully!");
@@ -110,6 +116,7 @@ function CollectionForm() {
           <p>Next Collection Date: {submittedCollection.nextCollectionDate}</p>
         </div>
       )}
+      {showConfetti && <Confetti />}
     </div>
   );
 }
