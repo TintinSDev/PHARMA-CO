@@ -243,3 +243,24 @@ nav li {
   background-color: #1a1d20;
   transition: 0.3s ease;
 }
+
+.edit-button:hover {
+  color: greenyellow;
+
+}
+.delete-button{
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform: perspective(500px) translateZ(0);
+
+}
+.delete-button:hover {
+  transform: rotate3d(1, 1, 1, 180deg);
+  background-color: #ff0000;
+  transition: 0.3s ease;
+  border-radius: 20px;
+}

@@ -5,7 +5,7 @@ import CollectionForm from "./components/CollectionForm";
 import CollectionList from "./components/CollectionList";
 import PatientList from "./components/PatientList";
 import Navbar from "./pages/Navbar";
-import EditPatient from "./pages/EditPatient";
+import EditPatient from "./components/EditPatient";
 
 import "./App.css";
 

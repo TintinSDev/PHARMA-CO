@@ -20,7 +20,7 @@ function EditPatient() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await axios.put(`http://localhost:5174/patients/${id}`, patient);
-    navigate("/patients");
+    navigate("/patient-list");
   };
 
   return (
