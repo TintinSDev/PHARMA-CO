@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from backend.database import get_db
 from backend.models import Patient
-from backend.schemas import PatientCreate
+from backend.schemas import PatientCreate, PatientUpdate
 
 
 router = APIRouter(prefix="/patients", tags=["Patients"])
@@ -53,17 +53,18 @@ def get_patients(
 
 # endpoint to edit patient by id
 @router.put("/{patient_id}")
-def update_patient(patient_id: int, patient_data: PatientCreate, db: Session = Depends(get_db)):
+def update_patient(patient_id: int, patient_data: PatientUpdate, db: Session = Depends(get_db)):
     patient = db.query(Patient).filter(Patient.id == patient_id).first()
     if not patient:
         raise HTTPException(status_code=404, detail="Patient not found")
 
-    for key, value in patient_data.dict().items():
+    for key, value in patient_data.dict(exclude_unset=True).items():
         setattr(patient, key, value)
 
     db.commit()
     db.refresh(patient)
     return {"message": "Patient updated successfully", "patient": patient}
+
 
 # endpoint to delete patient by id
 @router.delete("/{patient_id}")

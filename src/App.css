@@ -250,17 +250,18 @@ nav li {
 }
 .delete-button{
   color: white;
-  padding: 10px;
+  padding: 5px;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  transform: perspective(500px) translateZ(0);
+  transform: perspective(5=700px) translateZ(0);
 
 }
 .delete-button:hover {
-  transform: rotate3d(1, 1, 1, 180deg);
+  transform: perspective(500px) translateZ(20px) scale(1.1);
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
   background-color: #ff0000;
   transition: 0.3s ease;
-  border-radius: 20px;
+  border-radius: 30px;
 }

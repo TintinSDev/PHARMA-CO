@@ -79,8 +79,8 @@ function PatientList() {
       <ul className="grid-container">
         {patients.map((patient) => (
           <li key={patient.id}>
-            {patient.first_name} {patient.middle_name} {patient.last_name} 
-            <Link to={`/edit-patient/${patient.id}` } className="edit-button">✏ Edit</Link>
+            {patient.id} {patient.first_name} {patient.middle_name} {patient.last_name} 
+            <Link to={`/edit-patient/${patient.id}` }>✏ Edit</Link>
             <button onClick={() => deletePatient(patient.id)} className="delete-button">🗑 Delete</button>
           </li>
         ))}

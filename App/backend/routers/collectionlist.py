@@ -31,21 +31,21 @@ def get_collections_list(
     db: Session = Depends(get_db), 
     page: int = Query(0, alias="page"), 
     limit: int = Query(10),
-    search: str = None, skip: int = 0
+    search: str = None
 ):
-    total_collections = db.query(Collection).count()
     query = db.query(Collection)
     
+    # Apply search filter
     if search:
-    # Filter collections by patient's name
-     query = query.join(Patient).filter(
-        (Patient.first_name.ilike(f"%{search}%")) | 
-        (Patient.middle_name.ilike(f"%{search}%")) | 
-        (Patient.last_name.ilike(f"%{search}%"))
-    )
+        query = query.join(Patient).filter(
+            (Patient.first_name.ilike(f"%{search}%")) | 
+            (Patient.middle_name.ilike(f"%{search}%")) | 
+            (Patient.last_name.ilike(f"%{search}%"))
+        )
 
-
-    collections = db.query(Collection).offset(page * limit).limit(limit).all()
+    # Apply pagination to the filtered query
+    total_collections = query.count()
+    collections = query.offset(page * limit).limit(limit).all()
     
     collection_data = []
     for collection in collections:

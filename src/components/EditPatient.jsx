@@ -6,6 +6,7 @@ function EditPatient() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [patient, setPatient] = useState({ first_name: "", middle_name: "", last_name: "" });
+  
 
   useEffect(() => {
     axios.get(`http://localhost:5174/patients/${id}`)
@@ -20,6 +21,7 @@ function EditPatient() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await axios.put(`http://localhost:5174/patients/${id}`, patient);
+    alert("Patient updated successfully!");
     navigate("/patient-list");
   };
 

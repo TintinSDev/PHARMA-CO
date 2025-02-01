@@ -172,7 +172,7 @@ function CollectionList() {
 
   const fetchCollections = async () => {
     try {
-
+      
       const response = await axios.get(
         //`https://pharmartcoh.onrender.com/collectionlist?page=${currentPage}&limit=${limit}&search=${search}`
         `http://localhost:5174/collectionlist?page=${currentPage}&limit=${limit}&search=${search}`
