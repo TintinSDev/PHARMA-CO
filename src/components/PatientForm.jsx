@@ -11,8 +11,8 @@ function PatientForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      //const response = await axios.post("https://pharmartcoh.onrender.com/patients", {
-        const response = await axios.post("http://localhost:5174/patients", {
+        const response = await axios.post("https://pharmartcoh.onrender.com/patients", {
+      //  const response = await axios.post("http://localhost:5174/patients", {
         first_name: firstName,
         middle_name: middleName,
         last_name: lastName,

@@ -9,7 +9,7 @@ function EditPatient() {
   
 
   useEffect(() => {
-    axios.get(`http://localhost:5174/patients/${id}`)
+    axios.get(`https://pharmartcoh.onrender.com/patients/${id}`)
       .then(response => setPatient(response.data))
       .catch(error => console.error("Error fetching patient data:", error));
   }, [id]);
@@ -20,7 +20,7 @@ function EditPatient() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.put(`http://localhost:5174/patients/${id}`, patient);
+    await axios.put(`https://pharmartcoh.onrender.com/patients/${id}`, patient);
     alert("Patient updated successfully!");
     navigate("/patient-list");
   };

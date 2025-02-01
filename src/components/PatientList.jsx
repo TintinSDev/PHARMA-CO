@@ -55,8 +55,8 @@ function PatientList() {
 
   const fetchPatients = async () => {
     try {
-      //const response = await axios.get(`https://pharmartcoh.onrender.com/patients?page=${currentPage}&limit=${limit}`);
-      const response = await axios.get(`http://localhost:5174/patients?page=${currentPage}&limit=${limit}`);
+      const response = await axios.get(`https://pharmartcoh.onrender.com/patients?page=${currentPage}&limit=${limit}`);
+      //const response = await axios.get(`http://localhost:5174/patients?page=${currentPage}&limit=${limit}`);
       setPatients(response.data.patients);
       setTotalPatients(response.data.total);
     } catch (error) {
@@ -66,7 +66,7 @@ function PatientList() {
 
   const deletePatient = async (id) => {
     if (window.confirm("Are you sure you want to delete this patient?")) {
-      await axios.delete(`http://localhost:5174/patients/${id}`);
+      await axios.delete(`https://pharmartcoh.onrender.com/patients/${id}`);
       fetchPatients();
     }
   };

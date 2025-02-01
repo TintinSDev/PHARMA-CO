@@ -174,8 +174,8 @@ function CollectionList() {
     try {
       
       const response = await axios.get(
-        //`https://pharmartcoh.onrender.com/collectionlist?page=${currentPage}&limit=${limit}&search=${search}`
-        `http://localhost:5174/collections?page=${currentPage}&limit=${limit}&search=${search}`
+        `https://pharmartcoh.onrender.com/collections?page=${currentPage}&limit=${limit}&search=${search}`
+        // `http://localhost:5174/collections?page=${currentPage}&limit=${limit}&search=${search}`
       );
       setCollections(response.data.collections);
       setTotalCollections(response.data.total);
