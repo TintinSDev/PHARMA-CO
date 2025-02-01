@@ -71,6 +71,8 @@ function PatientForm() {
         <div style={{ color: "green", marginTop: "1rem", bold: true}}>
           <h3>Patient added successfully!</h3>
           <p>Patient ID: {patientId}</p>
+          <strong style={{ color: "red"}}>Please remember this ID for future reference.</strong>
+          <p>Thank you.</p>
         </div>
       )}
       {showConfetti && <Confetti />}
