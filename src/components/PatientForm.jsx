@@ -23,9 +23,9 @@ function PatientForm() {
       setFirstName("");
       setMiddleName("");
       setLastName("");
-       // Show confetti after successful submission
+      // Show confetti after submission
        setShowConfetti(true);
-       setTimeout(() => setShowConfetti(false), 9000); // Hide confetti after 5 seconds
+       setTimeout(() => setShowConfetti(false), 8000); // Hide confetti after 8 seconds
  
 
        // Show success alert
