@@ -10,7 +10,7 @@ class Patient(Base):
     middle_name = Column(String, index=True)
     last_name = Column(String, index=True)
     
-    Collections = relationship("Collection", back_populates="patient")
+    Collections = relationship("Collection", back_populates="patient", cascade="all, delete")
 
 # class Regimen(Base):
 #     __tablename__ = "regimens"

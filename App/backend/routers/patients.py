@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from backend.database import get_db
-from backend.models import Patient
+from backend.models import Patient, Collection
 from backend.schemas import PatientCreate, PatientUpdate
 
 
@@ -67,13 +67,26 @@ def update_patient(patient_id: int, patient_data: PatientUpdate, db: Session = D
 
 
 # endpoint to delete patient by id
+# @router.delete("/{patient_id}")
+# def delete_patient(patient_id: int, db: Session = Depends(get_db)):
+#     patient = db.query(Patient).filter(Patient.id == patient_id).first()
+#     if not patient:
+#         raise HTTPException(status_code=404, detail="Patient not found")
+
+#     db.delete(patient)
+#     db.commit()
+#     return {"message": "Patient deleted successfully"}
+
 @router.delete("/{patient_id}")
 def delete_patient(patient_id: int, db: Session = Depends(get_db)):
     patient = db.query(Patient).filter(Patient.id == patient_id).first()
     if not patient:
         raise HTTPException(status_code=404, detail="Patient not found")
 
+    # Delete all collections associated with this patient first
+    db.query(Collection).filter(Collection.patient_id == patient_id).delete()
+
+    # Now delete the patient
     db.delete(patient)
     db.commit()
-    return {"message": "Patient deleted successfully"}
-
+    return {"message": "Patient and related collections deleted successfully"}

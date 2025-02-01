@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from backend.database import get_db
 from backend.models import Collection, Patient
@@ -35,4 +35,40 @@ def add_collection(
         "regimen": new_collection.regimen,
         "next_collection_date": new_collection.next_collection_date,
         "id": new_collection.id,
+    }
+
+@router.get("/")
+def get_collections_list(
+    db: Session = Depends(get_db), 
+    page: int = Query(0, alias="page"), 
+    limit: int = Query(10),
+    search: str = None
+):
+    query = db.query(Collection).join(Patient, Collection.patient_id == Patient.id)
+    
+    # Apply search filter
+    if search:
+        query = query.join(Patient).filter(
+            (Patient.first_name.ilike(f"%{search}%")) | 
+            (Patient.middle_name.ilike(f"%{search}%")) | 
+            (Patient.last_name.ilike(f"%{search}%"))
+        )
+
+    # Apply pagination to the filtered query
+    total_collections = query.count()
+    collections = query.offset(page * limit).limit(limit).all()
+    
+    collection_data = []
+    for collection in collections:
+        patient = db.query(Patient).filter(Patient.id == collection.patient_id).first()
+        collection_data.append({
+            "id": collection.id,
+            "patient_name": f"{patient.first_name} {patient.middle_name} {patient.last_name}",
+            "regimen": collection.regimen,
+            "next_collection_date": collection.next_collection_date,
+        })
+
+    return {
+        "total": total_collections,
+        "collections": collection_data
     }
