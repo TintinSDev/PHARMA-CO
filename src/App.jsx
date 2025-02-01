@@ -5,6 +5,8 @@ import CollectionForm from "./components/CollectionForm";
 import CollectionList from "./components/CollectionList";
 import PatientList from "./components/PatientList";
 import Navbar from "./pages/Navbar";
+import EditPatient from "./pages/EditPatient";
+
 import "./App.css";
 
 function App() {
@@ -17,6 +19,7 @@ function App() {
         <Route path="/collection-form" element={<CollectionForm />} />
         <Route path="/collection-list" element={ <CollectionList />} />
         <Route path="/patient-list" element={<PatientList />} />
+        <Route path="/edit-patient/:id" element={<EditPatient />} />
       </Routes>
     </Router>
   );
