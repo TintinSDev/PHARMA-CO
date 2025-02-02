@@ -30,6 +30,7 @@ function PatientForm() {
 
        // Show success alert
     alert("Patient added successfully!");
+    console.log("Patient added successfully!");
     } catch (err) {
       console.error("Error adding patient:", err);
        // Show error alert

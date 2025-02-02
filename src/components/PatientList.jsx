@@ -42,11 +42,14 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { motion } from "framer-motion";
+import trashBin from "/trah.png"; // Use an actual trash bin image or SVG
 
 function PatientList() {
   const [patients, setPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPatients, setTotalPatients] = useState(0);
+  const [deletedPatients, setDeletedPatients] = useState([]);
   const limit = 10; // Number of patients per page
 
   useEffect(() => {
@@ -66,8 +69,13 @@ function PatientList() {
 
   const deletePatient = async (id) => {
     if (window.confirm("Are you sure you want to delete this patient?")) {
-      await axios.delete(`https://pharmartcoh.onrender.com/patients/${id}`);
-      fetchPatients();
+      setDeletedPatients((prev) => [...prev, id]); // Trigger animation
+
+      setTimeout(async () => {
+        await axios.delete(`https://pharmartcoh.onrender.com/patients/${id}`);
+        fetchPatients();
+        setDeletedPatients((prev) => prev.filter((pid) => pid !== id)); // Remove animation
+      }, 2000);
     }
   };
 
@@ -78,10 +86,49 @@ function PatientList() {
       <h2>Patients</h2>
       <ul className="grid-container">
         {patients.map((patient) => (
-          <li key={patient.id}>
+          <li key={patient.id} style={{ position: "relative" }}>
             {patient.id} {patient.first_name} {patient.middle_name} {patient.last_name} 
             <Link to={`/edit-patient/${patient.id}` }>✏ Edit</Link>
             <button onClick={() => deletePatient(patient.id)} className="delete-button">🗑 Delete</button>
+
+            {/* Trash bin animation when patient is deleted */}
+            {deletedPatients.includes(patient.id) && (
+              <>
+                {Array.from({ length: 7 }).map((_, index) => (
+                  <motion.img
+                    key={index}
+                    src={trashBin}
+                    alt="Trash Bin"
+                    initial={{
+                      y: -100,
+                      x: Math.random() * 100 - 50, // Random horizontal position
+                      rotate: Math.random() * 360, // Random rotation
+                      opacity: 1,
+                      scale: 1,
+                    }}
+                    animate={{
+                      y: 400, // Falls down
+                      x: Math.random() * 100 - 50, // Random drift
+                      rotate: Math.random() * 720, // Extra spin
+                      opacity: 0,
+                      scale: 0.5, // Shrinks
+                    }}
+                    transition={{
+                      duration: 1.5,
+                      ease: "easeIn",
+                      delay: index * 0.2, // Staggered effect
+                    }}
+                    style={{
+                      position: "absolute",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      width: "40px",
+                      height: "40px",
+                    }}
+                  />
+                ))}
+              </>
+            )}
           </li>
         ))}
       </ul>
@@ -93,7 +140,5 @@ function PatientList() {
     </div>
   );
 }
-
-
 
 export default PatientList;
