@@ -1,11 +1,11 @@
-import pharma from '/pharma.jpg';
+// import pharma from '/pharma.jpg';
 function Home() {
     return (
       <div>
-        <img src={pharma} alt="Pharma" className='pharma'/>
-        <h1>ARV Collection Tracking</h1>
+        {/* <img src={pharma} alt="Pharma" className='pharma'/> */}
+        <h1>HAART Collection Tracking</h1>
         <p>
-          Welcome to the ARV Collection Tracking System. Please select an option
+          Welcome to the HART Collection Tracking System. Please select an option
           from the navigation bar.
         </p>
       </div>
