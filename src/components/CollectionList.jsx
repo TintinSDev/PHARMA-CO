@@ -1,207 +1,82 @@
-// import { useState, useEffect } from "react";
-// import axios from "axios";
-
-// function CollectionList() {
-//   const [collections, setCollections] = useState([]);
-
-//   useEffect(() => {
-//     fetchCollections();
-//   }, []);
-
-//   const fetchCollections = async () => {
-//     const response = await axios.get("http://localhost:5174/collectionlist");
-//     setCollections(response.data);
-//   };
-
-//   return (
-//     <div className="collection-list">
-//       <h2>Collections</h2>
-//       <ul>
-//         {collections.map((c) => (
-//           <li key={c.id}>
-//             <p>Patient: {c.patient_name}</p>
-//             <p>Regimen: {c.regimen}</p>
-//             <p>Next Collection Date: {c.next_collection_date}</p>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// }
-
-// export default CollectionList;
-
-// PAGINATION FUNCTIONALITY
-
-// import { useState, useEffect } from "react";
-// import axios from "axios";
-
-// function CollectionList() {
-//   const [collections, setCollections] = useState([]);
-//   const [currentPage, setCurrentPage] = useState(0);
-//   const [totalCollections, setTotalCollections] = useState(0);
-//   const limit = 2; // Number of collections per page
-
-//   useEffect(() => {
-//     fetchCollections();
-//   }, [currentPage]);
-
-//   const fetchCollections = async () => {
-//     try {
-//       const response = await axios.get(`http://localhost:5174/collectionlist?page=${currentPage}&limit=${limit}`);
-//       setCollections(response.data.collections);
-//       setTotalCollections(response.data.total);
-//     } catch (error) {
-//       console.error("Failed to fetch collections:", error);
-//     }
-//   };
-
-//   const totalPages = Math.ceil(totalCollections / limit);
-
-//   return (
-//     <div className="collection-list">
-//       <h2>Collections</h2>
-//       <ul className="grid-container">
-//         {collections.map((c) => (
-//           <li key={c.id}>
-//             <p>Patient: {c.patient_name}</p>
-//             <p>Regimen: {c.regimen}</p>
-//             <p>Next Collection Date: {c.next_collection_date}</p>
-//           </li>
-//         ))}
-//       </ul>
-
-//       {/* Pagination Controls */}
-//       <div className="pagination">
-//         <button 
-//           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
-//           disabled={currentPage === 0}
-//         >
-//           Prev
-//         </button>
-//         <span> Page {currentPage + 1} of {totalPages} </span>
-//         <button 
-//           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}
-//           disabled={currentPage === totalPages - 1}
-//         >
-//           Next
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default CollectionList;
-
-// SEARCH FUNCTIONALITY
-
-// import { useState, useEffect } from "react";
-// import axios from "axios";
-
-// function CollectionList() {
-//   const [collections, setCollections] = useState([]);
-//   const [search, setSearch] = useState("");
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   useEffect(() => {
-//     fetchCollections();
-//   }, [search]); // Fetch when search query changes
-
-//   const fetchCollections = async () => {
-//     try {
-//       setLoading(true);
-//       const response = await axios.get(
-//         `http://localhost:5174/collectionlist?page=0&limit=5&search=${search}`
-//       );
-//       setCollections(response.data);
-//     } catch (err) {
-//       setError("Failed to fetch collections. Please try again later.");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const handleSearchChange = (e) => {
-//     setSearch(e.target.value); // Update the search term
-//   };
-
-//   if (loading) return <p>Loading collections...</p>;
-//   if (error) return <p>{error}</p>;
-
-//   return (
-//     <div className="collection-list">
-//       <h2>Collections</h2>
-//       <input
-//         type="text"
-//         placeholder="Search by patient name"
-//         value={search}
-//         onChange={handleSearchChange}
-//       />
-//       <ul>
-//         {collections.map((c) => (
-//           <li key={c.id}>
-//             <p>Patient: {c.patient_name}</p>
-//             <p>Regimen: {c.regimen}</p>
-//             <p>Next Collection Date: {c.next_collection_date}</p>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// }
-
-// export default CollectionList;
-
-
-// BOTH PAGINATION AND SEARCH FUNCTIONALITY
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 
 function CollectionList() {
   const [collections, setCollections] = useState([]);
-  const [search, setSearch] = useState(""); // Search query state
+  const [search, setSearch] = useState(""); // Search term
   const [currentPage, setCurrentPage] = useState(0);
   const [totalCollections, setTotalCollections] = useState(0);
-  const limit = 5; // Number of collections per page
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchCollections();
-  }, [currentPage, search]); // Fetch when page or search changes
+  const limit = 5; // Items per page
 
+  // Fetch collections from backend
   const fetchCollections = async () => {
     try {
-      
+      setLoading(true);
+      setError(null);
+
       const response = await axios.get(
-       // `https://pharmartcoh.onrender.com/collections?page=${currentPage}&limit=${limit}&search=${search}`
-         `http://localhost:8000/collections?page=${currentPage}&limit=${limit}&search=${search}`
+          `https://pharmartcoh.onrender.com/collections/collections?page=${currentPage}&limit=${limit}&search=${encodeURIComponent(search)}`
+       // `http://localhost:8000/collections/collections?page=${currentPage}&limit=${limit}&search=${encodeURIComponent(search)}`
       );
-      setCollections(response.data.collections);
-      setTotalCollections(response.data.total);
-    } catch (error) {
-      console.error("Failed to fetch collections:", error);
+
+      if (response.data && Array.isArray(response.data.collections)) {
+        setCollections(response.data.collections);
+        setTotalCollections(response.data.total || 0);
+      } else {
+        setCollections([]);
+        setTotalCollections(0);
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Failed to fetch collections.");
+      setCollections([]);
+      setTotalCollections(0);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const totalPages = Math.ceil(totalCollections / limit);
+  // Live search with debounce
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      setCurrentPage(0); // Reset to first page on new search
+      fetchCollections();
+    }, 400); // 400ms delay after typing
 
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value); // Update search term
-    setCurrentPage(0); // Reset to page 1 when search changes
-  };
+    return () => clearTimeout(delayDebounce);
+  }, [search]);
+
+  // Fetch when page changes
+  useEffect(() => {
+    fetchCollections();
+  }, [currentPage]);
+
+  const totalPages = Math.ceil(totalCollections / limit);
 
   return (
     <div className="collection-list">
       <h2>Collections</h2>
-      
+
       {/* Search Input */}
-      <input
-        type="text"
-        placeholder="Search by patient name"
-        value={search}
-        onChange={handleSearchChange}
-      />
+      <div className="search-container">
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Search by patient name..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+
+      {/* Loading / Error */}
+      {loading && <p>Loading collections...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {!loading && !error && collections.length === 0 && (
+        <p>No collections found for "{search}"</p>
+      )}
 
       {/* Collection List */}
       <ul className="grid-container">
@@ -215,23 +90,27 @@ function CollectionList() {
       </ul>
 
       {/* Pagination */}
-      <div className="pagination">
-        <button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
-          disabled={currentPage === 0}
-        >
-          Prev
-        </button>
-        <span>
-          Page {currentPage + 1} of {totalPages}
-        </span>
-        <button
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}
-          disabled={currentPage === totalPages - 1}
-        >
-          Next
-        </button>
-      </div>
+      {totalCollections > limit && (
+        <div className="pagination">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
+            disabled={currentPage === 0}
+          >
+            Prev
+          </button>
+          <span>
+            Page {currentPage + 1} of {totalPages}
+          </span>
+          <button
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))
+            }
+            disabled={currentPage === totalPages - 1}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

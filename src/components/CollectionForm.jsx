@@ -1,67 +1,78 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import Confetti from "react-confetti";
 
 function CollectionForm() {
-  const [patientId, setPatientId] = useState("");
-  const [regimen, setRegimen] = useState(""); // Regimen as string
+  const { id } = useParams();
+  const location = useLocation();
+
+  // Patient data passed from PatientList
+  const patient = location.state?.patient;
+
+  const [patientId, setPatientId] = useState(id || "");
+  const [patientName, setPatientName] = useState("");
+
+  const [regimen, setRegimen] = useState("");
   const [quantity, setQuantity] = useState("");
   const [collectionDate, setCollectionDate] = useState("");
   const [nextCollectionDate, setNextCollectionDate] = useState("");
-  const [submittedCollection, setSubmittedCollection] = useState(null); // To store submitted collection data
-  const [showConfetti, setShowConfetti] = useState(false)
+  const [submittedCollection, setSubmittedCollection] = useState(null);
+  const [showConfetti, setShowConfetti] = useState(false);
 
-  // Function to calculate the next collection date
+  // Load patient name when page opens
+  useEffect(() => {
+    if (patient) {
+      setPatientName(
+        `${patient.first_name} ${patient.middle_name} ${patient.last_name}`
+      );
+    }
+  }, [patient]);
+
+  // Auto-generate next collection date
   const handleCollectionDateChange = (e) => {
     const selectedDate = e.target.value;
     setCollectionDate(selectedDate);
 
     if (selectedDate) {
       const nextDate = new Date(selectedDate);
-      nextDate.setMonth(nextDate.getMonth() + 3); // Adds 3 months
-      setNextCollectionDate(nextDate.toISOString().split("T")[0]); // Format as YYYY-MM-DD
+      nextDate.setMonth(nextDate.getMonth() + 3);
+      setNextCollectionDate(nextDate.toISOString().split("T")[0]);
     } else {
-      setNextCollectionDate(""); // Reset if no date is selected
+      setNextCollectionDate("");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-       //const response = await axios.post("https://pharmartcoh.onrender.com/collections", {
-         const response = await axios.post("http://localhost:8000/collections", {
+      const response = await axios.post("https://pharmartcoh.onrender.com/collections", {
+           //const response = await axios.post("http://localhost:8000/collections", {
         patient_id: patientId,
-        regimen: regimen,
+        regimen,
         quantity: parseInt(quantity),
         collection_date: collectionDate,
         next_collection_date: nextCollectionDate,
       });
 
-      // Set the returned data to display on successful submission
       setSubmittedCollection({
         patientName: response.data.patient_name,
         regimen: response.data.regimen,
         nextCollectionDate: response.data.next_collection_date,
       });
-      
-      // Clear the form
-      setPatientId("");
+
+      // Reset form
       setRegimen("");
       setQuantity("");
       setCollectionDate("");
       setNextCollectionDate("");
 
-      // Show confetti after successful submission
       setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 9000); // Hide confetti after 5 seconds
+      setTimeout(() => setShowConfetti(false), 9000);
 
-      // Show success alert
       alert("Collection added successfully!");
-
     } catch (err) {
       console.error("Error adding collection:", err);
-
-      // Show error alert
       alert("Failed to add collection. Please try again.");
     }
   };
@@ -69,48 +80,35 @@ function CollectionForm() {
   return (
     <div>
       <h2>Collection Form</h2>
+
       <form onSubmit={handleSubmit}>
-        <label>Enter Patient ID (Unique Identifier):</label>
-        <input
-          type="text"
-          value={patientId}
-          onChange={(e) => setPatientId(e.target.value)}
-          required
-        />
+        <label>Patient ID:</label>
+        <input type="text" value={patientId} readOnly />
 
-        <label>Enter Regimen (Treatment Plan):</label>
-        <input
-          type="text"
-          value={regimen}
-          onChange={(e) => setRegimen(e.target.value)}
-          required
-        />
+        {/* SHOW PATIENT FULL NAME */}
+        {patientName && (
+          <p>
+            <strong>Patient Name:</strong> {patientName}
+          </p>
+        )}
 
-        <label>Enter Quantity (Number of Doses):</label>
-        <input
-          type="number"
-          max="180"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-          required
-        />
+        <label>Regimen:</label>
+        <input type="text" value={regimen} onChange={(e) => setRegimen(e.target.value)} required />
 
-        <label>Select Collection Date:</label>
-        <input
-          type="date"
-          value={collectionDate}
-          onChange={handleCollectionDateChange}
-          required
-        />
+        <label>Quantity:</label>
+        <input type="number" max="180" value={quantity} onChange={(e) => setQuantity(e.target.value)} required />
 
-        <label>Next Collection Date (Auto-Generated):</label>
+        <label>Collection Date:</label>
+        <input type="date" value={collectionDate} onChange={handleCollectionDateChange} required />
+
+        <label>Next Collection Date (Auto):</label>
         <input type="date" value={nextCollectionDate} readOnly />
 
         <button type="submit">Submit</button>
       </form>
 
       {submittedCollection && (
-        <div style={{ color: "green", marginTop: "1rem", bold: true }}>
+        <div style={{ color: "green", marginTop: "1rem" }}>
           <h3>Collection Added Successfully!</h3>
           <p>Patient Name: {submittedCollection.patientName}</p>
           <p>Regimen: {submittedCollection.regimen}</p>

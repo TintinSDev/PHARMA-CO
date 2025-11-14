@@ -5,12 +5,13 @@ import axios from "axios";
 function EditPatient() {
   const { id } = useParams();
   const navigate = useNavigate();
+   const [patientId, setPatientId] = useState(id || "");
   const [patient, setPatient] = useState({ first_name: "", middle_name: "", last_name: "" });
   
 
   useEffect(() => {
-    //axios.get(`https://pharmartcoh.onrender.com/patients/${id}`)
-         axios.get(`http://localhost:8000/patients/${id}`)
+    axios.get(`https://pharmartcoh.onrender.com/patients/${id}`)
+        // axios.get(`http://localhost:8000/patients/${id}`)
       .then(response => setPatient(response.data))
       .catch(error => console.error("Error fetching patient data:", error));
   }, [id]);
@@ -21,8 +22,8 @@ function EditPatient() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //await axios.put(`https://pharmartcoh.onrender.com/patients/${id}`, patient);
-    await axios.put(`http://localhost:8000/patients/${id}`, patient);
+    await axios.put(`https://pharmartcoh.onrender.com/patients/${id}`, patient);
+    //await axios.put(`http://localhost:8000/patients/${id}`, patient);
     alert("Patient updated successfully!");
     navigate("/patient-list");
   };
@@ -31,6 +32,8 @@ function EditPatient() {
     <div>
       <h2>Edit Patient</h2>
       <form onSubmit={handleSubmit}>
+          <label>Patient ID:</label>
+        <input type="text" value={patientId} readOnly />
         <label>First Name:</label>
         <input type="text" name="first_name" value={patient.first_name} onChange={handleChange} />
         <label>Middle Name:</label>

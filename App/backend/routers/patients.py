@@ -36,20 +36,29 @@ def add_patient(patient: PatientCreate, db: Session = Depends(get_db)):
     return {"id": new_patient.id, "message": "Patient added successfully"}  
 
 # endpoint to get patient by id
-@router.get("/")
+@router.get("/patients")
 def get_patients(
-    db: Session = Depends(get_db), 
-    skip: int = Query(0, alias="page"), 
-    limit: int = Query(10)
+    db: Session = Depends(get_db),
+    page: int = Query(0),
+    limit: int = Query(12),
+    search: str = None
 ):
-    total_patients = db.query(Patient).count()  # Get total count for pagination
+    query = db.query(Patient)
 
-    patients = db.query(Patient).offset(skip * limit).limit(limit).all()
+    # Apply search only when user typed something
+    if search is not None and search != "":
+        search_pattern = f"%{search}%"
+        query = query.filter(
+            Patient.first_name.ilike(search_pattern) |
+            Patient.middle_name.ilike(search_pattern) |
+            Patient.last_name.ilike(search_pattern)
+        )
 
-    return {
-        "total": total_patients,
-        "patients": patients
-    }
+    total = query.count()
+    patients = query.offset(page * limit).limit(limit).all()
+
+    return {"total": total, "patients": patients}
+
 
 # endpoint to edit patient by id
 @router.put("/{patient_id}")

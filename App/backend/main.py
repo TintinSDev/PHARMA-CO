@@ -9,12 +9,15 @@ Base.metadata.create_all(bind=engine)
 # FastAPI App
 app = FastAPI(
 )
+# Drop all tables
+# Base.metadata.drop_all(bind=engine)
+
 
 # CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    #allow_origins=["https://pharma-co.onrender.com"],
-     allow_origins=["http://localhost:5173"],                 # Change this to your frontend URL
+    allow_origins=["https://pharma-co.onrender.com"],
+     #allow_origins=["http://localhost:5173"],                 # Change this to your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -24,6 +27,8 @@ app.add_middleware(
 app.include_router(patients.router)
 app.include_router(collections.router)
 app.include_router(uploads.router)
+
+
 
 @app.get("/")
 def read_root():

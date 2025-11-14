@@ -16,7 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/patient-form" element={<PatientForm />} />
-        <Route path="/collection-form" element={<CollectionForm />} />
+        <Route path="/collection-form/:id" element={<CollectionForm />} />
         <Route path="/collection-list" element={ <CollectionList />} />
         <Route path="/patient-list" element={<PatientList />} />
         <Route path="/edit-patient/:id" element={<EditPatient />} />
