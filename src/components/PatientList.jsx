@@ -9,7 +9,7 @@ function PatientList() {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPatients, setTotalPatients] = useState(0);
   const [deletedPatients, setDeletedPatients] = useState([]);
-  const limit = 10; // Number of patients per page
+  const limit = 12; // Number of patients per page
 
   useEffect(() => {
     fetchPatients();
@@ -17,8 +17,8 @@ function PatientList() {
 
   const fetchPatients = async () => {
     try {
-      const response = await axios.get(`https://pharmartcoh.onrender.com/patients?page=${currentPage}&limit=${limit}`);
-      //const response = await axios.get(`http://localhost:5174/patients?page=${currentPage}&limit=${limit}`);
+      //const response = await axios.get(`https://pharmartcoh.onrender.com/patients?page=${currentPage}&limit=${limit}`);
+      const response = await axios.get(`http://localhost:8000/patients?page=${currentPage}&limit=${limit}`);
       setPatients(response.data.patients);
       setTotalPatients(response.data.total);
     } catch (error) {
@@ -31,7 +31,8 @@ function PatientList() {
       setDeletedPatients((prev) => [...prev, id]); // Trigger animation
 
       setTimeout(async () => {
-        await axios.delete(`https://pharmartcoh.onrender.com/patients/${id}`);
+       // await axios.delete(`https://pharmartcoh.onrender.com/patients/${id}`);
+        await axios.delete(`http://localhost:8000/patients/${id}`);
         fetchPatients();
         setDeletedPatients((prev) => prev.filter((pid) => pid !== id)); // Remove animation
       }, 2000);
@@ -47,13 +48,13 @@ function PatientList() {
         {patients.map((patient) => (
           <li key={patient.id} style={{ position: "relative" }}>
             {patient.id} {patient.first_name} {patient.middle_name} {patient.last_name} 
-            <Link to={`/edit-patient/${patient.id}` }>✏ Edit</Link>
+            <Link to={`/edit-patient/${patient.id}` } className= "edit-button">✏ Edit</Link>
             <button onClick={() => deletePatient(patient.id)} className="delete-button">🗑 Delete</button>
 
             {/* Trash bin animation when patient is deleted */}
             {deletedPatients.includes(patient.id) && (
               <>
-                {Array.from({ length: 10 }).map((_, index) => (
+                {Array.from({ length: 12 }).map((_, index) => (
                   <motion.img
                     key={index}
                     src={trashBin}

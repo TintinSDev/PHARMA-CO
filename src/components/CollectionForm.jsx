@@ -28,8 +28,8 @@ function CollectionForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-       const response = await axios.post("https://pharmartcoh.onrender.com/collections", {
-        // const response = await axios.post("http://localhost:5174/collections", {
+       //const response = await axios.post("https://pharmartcoh.onrender.com/collections", {
+         const response = await axios.post("http://localhost:8000/collections", {
         patient_id: patientId,
         regimen: regimen,
         quantity: parseInt(quantity),

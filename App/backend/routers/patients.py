@@ -65,6 +65,13 @@ def update_patient(patient_id: int, patient_data: PatientUpdate, db: Session = D
     db.refresh(patient)
     return {"message": "Patient updated successfully", "patient": patient}
 
+# Get patient by ID
+@router.get("/{patient_id}", response_model=PatientCreate)  # or a proper schema
+def get_patient(patient_id: int, db: Session = Depends(get_db)):
+    patient = db.query(Patient).filter(Patient.id == patient_id).first()
+    if not patient:
+        raise HTTPException(status_code=404, detail="Patient not found")
+    return patient
 
 # endpoint to delete patient by id
 # @router.delete("/{patient_id}")
