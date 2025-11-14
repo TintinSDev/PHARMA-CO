@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import patients, collections
+from .routers import patients, collections, uploads
 from .database import Base, engine
 
 # Initialize database tables
@@ -23,6 +23,7 @@ app.add_middleware(
 # Include routers
 app.include_router(patients.router)
 app.include_router(collections.router)
+app.include_router(uploads.router)
 
 @app.get("/")
 def read_root():
