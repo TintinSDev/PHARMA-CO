@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
 function CollectionList() {
   const [collections, setCollections] = useState([]);
   const [search, setSearch] = useState(""); // Search term
@@ -8,8 +7,7 @@ function CollectionList() {
   const [totalCollections, setTotalCollections] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const limit = 5; // Items per page
+  const limit = 8; // Items per page
 
   // Fetch collections from backend
   const fetchCollections = async () => {
@@ -19,7 +17,7 @@ function CollectionList() {
 
       const response = await axios.get(
           `https://pharmartcoh.onrender.com/collections/collections?page=${currentPage}&limit=${limit}&search=${encodeURIComponent(search)}`
-       // `http://localhost:8000/collections/collections?page=${currentPage}&limit=${limit}&search=${encodeURIComponent(search)}`
+        //`http://localhost:8000/collections/collections?page=${currentPage}&limit=${limit}&search=${encodeURIComponent(search)}`
       );
 
       if (response.data && Array.isArray(response.data.collections)) {
@@ -79,15 +77,24 @@ function CollectionList() {
       )}
 
       {/* Collection List */}
-      <ul className="grid-container">
-        {collections.map((c) => (
-          <li key={c.id}>
-            <p>Patient: {c.patient_name}</p>
-            <p>Regimen: {c.regimen}</p>
-            <p>Next Collection Date: {c.next_collection_date}</p>
-          </li>
-        ))}
-      </ul>
+     <ul className="grid-container-c">
+  {collections.map((c) => (
+    <li key={c.id}>
+      <p><strong>Patient:</strong><br />{c.patient_name}</p>
+
+      <p className="regimen-text">
+        <strong>Regimen:</strong><br />
+        {c.regimen}
+      </p>
+
+      <p>
+        <strong>Next Pickup:</strong><br />
+        {c.next_collection_date}
+      </p>
+    </li>
+  ))}
+</ul>
+
 
       {/* Pagination */}
       {totalCollections > limit && (

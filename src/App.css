@@ -131,20 +131,27 @@ form button:hover {
   opacity: 10%;
 }
 /* Patient and Collection Lists */
-.patient-list,
-.collection-list {
+.patient-list{
   padding: 20px;
-  background-color: #000000;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(8, 8, 8, 0.1);
+  box-shadow: 0 2px 5px rgba(8, 8, 8, 0.3);
   margin: 20px 0;
 }
-
+.collection-list {
+  padding: 20px;
+  color: #fff;
+}
 .patient-list,
 .collection-list {
   background-color: #555659;
 }
-
+.grid-container-c {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+}
 .patient-list ul,
 .collection-list ul {
   display: grid;
@@ -233,11 +240,25 @@ padding: 15px;
     min-height: 80px;
     display: flex;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     justify-content: space-between;
     align-items: flex-start;
 }
-
+.grid-container-c li {
+  background: #2f323a;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  line-height: 1.4;
+}
+.grid-container-c li p {
+  margin: 6px 0;
+}
+.regimen-text {
+  white-space: normal;
+  word-break: break-word;
+  font-weight: 500;
+}
 /* .pagination {
  
   display: flex;

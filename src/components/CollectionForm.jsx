@@ -47,7 +47,7 @@ function CollectionForm() {
     e.preventDefault();
     try {
       const response = await axios.post("https://pharmartcoh.onrender.com/collections", {
-           //const response = await axios.post("http://localhost:8000/collections", {
+      //     const response = await axios.post("http://localhost:8000/collections", {
         patient_id: patientId,
         regimen,
         quantity: parseInt(quantity),
@@ -76,6 +76,90 @@ function CollectionForm() {
       alert("Failed to add collection. Please try again.");
     }
   };
+const haartRegimens = {
+  firstLine: [
+    {
+      name: "TDF 300mg + 3TC 300mg + DTG 50mg (TLD)",
+      type: "Adult",
+      description: "Preferred first-line regimen for most adults and adolescents."
+    },
+    {
+      name: "TAF 25mg + 3TC 300mg + DTG 50mg (TAFLD)",
+      type: "Adult",
+      description: "Tenofovir alafenamide-based regimen with improved renal safety."
+    },
+    {
+      name: "ABC 600mg + 3TC 300mg + DTG 50mg (ABC/3TC/DTG)",
+      type: "Adult",
+      description: "First-line alternative for patients who cannot take TDF."
+    },
+    {
+      name: "ABC 120mg + 3TC 60mg + DTG 10mg (ABC/3TC/DTG)",
+      type: "Pediatric",
+      description: "WHO-recommended pediatric DTG-based first-line regimen."
+    },
+
+    // --- Pediatric Syrups ---
+    {
+      name: "ABC 20mg/mL + 3TC 10mg/mL Oral Solution",
+      type: "Pediatric Syrup",
+      description: "Pediatric ABC/3TC syrup for infants and young children."
+    },
+    {
+      name: "LPV/r 80mg/20mg per mL Oral Solution",
+      type: "Pediatric Syrup",
+      description: "Protease inhibitor pediatric solution for children who cannot swallow tablets."
+    }
+  ],
+
+  secondLine: [
+    {
+      name: "AZT 300mg + 3TC 150mg + DTG 50mg",
+      type: "Adult",
+      description: "Switch option for patients failing TDF-based first-line treatment."
+    },
+    {
+      name: "AZT 300mg + 3TC 300mg + NVP 200mg",
+      type: "Adult",
+      description: "Legacy second-line regimen; used where DTG unavailable."
+    },
+    {
+      name: "AZT 60mg + 3TC 30mg + LPV/r Pediatric",
+      type: "Pediatric",
+      description: "Protease-inhibitor based second-line regimen for children."
+    },
+
+    // --- Pediatric Syrups for Second-Line ---
+    {
+      name: "AZT 10mg/mL Syrup + 3TC 10mg/mL Syrup",
+      type: "Pediatric Syrup",
+      description: "AZT/3TC pediatric liquid formulation for second-line therapy."
+    }
+  ],
+
+  supportiveMedications: [
+    {
+      name: "Cotrimoxazole (Septrin) 240mg/5mL Pediatric Suspension",
+      type: "Prophylaxis",
+      description: "Used for PCP, toxoplasmosis and bacterial infection prophylaxis in children."
+    },
+    {
+      name: "Cotrimoxazole (Septrin) 960mg Tablet",
+      type: "Prophylaxis",
+      description: "Daily prophylaxis for adults with low CD4 counts or WHO stage 3–4."
+    },
+    {
+      name: "Fluconazole 50mg/5mL Oral Suspension",
+      type: "Prophylaxis / Treatment",
+      description: "For cryptococcal, candidiasis prophylaxis or treatment in susceptible patients."
+    },
+    {
+      name: "Fluconazole 200mg Tablet",
+      type: "Prophylaxis / Treatment",
+      description: "For cryptococcal disease secondary prophylaxis and candidiasis."
+    }
+  ]
+};
 
   return (
     <div>
@@ -93,7 +177,35 @@ function CollectionForm() {
         )}
 
         <label>Regimen:</label>
-        <input type="text" value={regimen} onChange={(e) => setRegimen(e.target.value)} required />
+
+<select value={regimen} onChange={(e) => setRegimen(e.target.value)} required>
+  <option value="">Select a regimen</option>
+
+  <optgroup label="First-Line HAART Regimens">
+    {haartRegimens.firstLine.map((item, i) => (
+      <option key={`first-${i}`} value={item.name}>
+        {item.name} — {item.type}
+      </option>
+    ))}
+  </optgroup>
+
+  <optgroup label="Second-Line HAART Regimens">
+    {haartRegimens.secondLine.map((item, i) => (
+      <option key={`second-${i}`} value={item.name}>
+        {item.name} — {item.type}
+      </option>
+    ))}
+  </optgroup>
+
+  <optgroup label="Supportive Medications (Septrin & Fluconazole)">
+    {haartRegimens.supportiveMedications.map((item, i) => (
+      <option key={`supp-${i}`} value={item.name}>
+        {item.name} — {item.type}
+      </option>
+    ))}
+  </optgroup>
+</select>
+
 
         <label>Quantity:</label>
         <input type="number" max="180" value={quantity} onChange={(e) => setQuantity(e.target.value)} required />
