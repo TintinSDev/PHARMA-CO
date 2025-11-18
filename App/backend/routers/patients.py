@@ -82,17 +82,6 @@ def get_patient(patient_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Patient not found")
     return patient
 
-# endpoint to delete patient by id
-# @router.delete("/{patient_id}")
-# def delete_patient(patient_id: int, db: Session = Depends(get_db)):
-#     patient = db.query(Patient).filter(Patient.id == patient_id).first()
-#     if not patient:
-#         raise HTTPException(status_code=404, detail="Patient not found")
-
-#     db.delete(patient)
-#     db.commit()
-#     return {"message": "Patient deleted successfully"}
-
 @router.delete("/{patient_id}")
 def delete_patient(patient_id: int, db: Session = Depends(get_db)):
     patient = db.query(Patient).filter(Patient.id == patient_id).first()
@@ -106,6 +95,20 @@ def delete_patient(patient_id: int, db: Session = Depends(get_db)):
     db.delete(patient)
     db.commit()
     return {"message": "Patient and related collections deleted successfully"}
+
+@router.delete("/delete-all")
+def delete_all_patients(confirm: bool = False, db: Session = Depends(get_db)):
+    if not confirm:
+        raise HTTPException(
+            status_code=400,
+            detail="Set confirm=true to delete ALL patients and collections."
+        )
+
+    db.query(Collection).delete()
+    db.query(Patient).delete()
+    db.commit()
+
+    return {"message": "All patients and collections deleted"}
 
 
 @router.post("/upload-csv")
